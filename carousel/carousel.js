@@ -21,20 +21,28 @@
     leftArrow.addEventListener('click', () => {
         if (currentCardIdx > 0) {
             currentCardIdx--;
-            carouselWindow.scrollLeft -= viewportWidth;
+            carouselWindow.scrollLeft = viewportWidth * currentCardIdx;
         }
     });
 
     rightArrow.addEventListener('click', () => {
         if (currentCardIdx < cards.length - 1) {
             currentCardIdx++;
-            carouselWindow.scrollLeft += viewportWidth;
+            carouselWindow.scrollLeft = viewportWidth * currentCardIdx;
         }
     });
 
+    // Keep track of the current active navigation button
+    const ACTIVE_NAV_BUTTON_CLASSNAME = 'active';
+    let activeNavButton = navButtons[0];
+
     navButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
+            activeNavButton.classList.remove(ACTIVE_NAV_BUTTON_CLASSNAME);
+            currentCardIdx = index;
             carouselWindow.scrollLeft = viewportWidth * index;
+            button.classList.add(ACTIVE_NAV_BUTTON_CLASSNAME);
+            activeNavButton = button;
         });
     });
 })();

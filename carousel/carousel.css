@@ -71,6 +71,7 @@ h1 {
     margin: 0 0.5em;
 }
 
+.nav-button.active,
 .nav-button:hover,
 .carousel-pointer:hover {
     color: coral;
