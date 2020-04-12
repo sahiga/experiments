@@ -15,13 +15,24 @@
     carousel.style.width = viewportWidth * cards.length + 'px';
     carouselWindow.style.width = viewportWidth + 'px';
 
+    // Keep track of the current and previous active navigation buttons
+    const ACTIVE_NAV_BUTTON_CLASSNAME = 'active';
+    let prevActiveNavButtonIdx = 0;
+    function resetActiveNavButton(currentActiveNavButtonIdx) {
+        navButtons[prevActiveNavButtonIdx].classList.remove(ACTIVE_NAV_BUTTON_CLASSNAME);
+        navButtons[currentActiveNavButtonIdx].classList.add(ACTIVE_NAV_BUTTON_CLASSNAME);
+        prevActiveNavButtonIdx = currentActiveNavButtonIdx;
+    }
+
     // Attach event listeners for navigating through cards
     let currentCardIdx = 0;
+
 
     leftArrow.addEventListener('click', () => {
         if (currentCardIdx > 0) {
             currentCardIdx--;
             carouselWindow.scrollLeft = viewportWidth * currentCardIdx;
+            resetActiveNavButton(currentCardIdx);
         }
     });
 
@@ -29,20 +40,15 @@
         if (currentCardIdx < cards.length - 1) {
             currentCardIdx++;
             carouselWindow.scrollLeft = viewportWidth * currentCardIdx;
+            resetActiveNavButton(currentCardIdx);
         }
     });
 
-    // Keep track of the current active navigation button
-    const ACTIVE_NAV_BUTTON_CLASSNAME = 'active';
-    let activeNavButton = navButtons[0];
-
     navButtons.forEach((button, index) => {
         button.addEventListener('click', () => {
-            activeNavButton.classList.remove(ACTIVE_NAV_BUTTON_CLASSNAME);
             currentCardIdx = index;
             carouselWindow.scrollLeft = viewportWidth * index;
-            button.classList.add(ACTIVE_NAV_BUTTON_CLASSNAME);
-            activeNavButton = button;
+            resetActiveNavButton(currentCardIdx);
         });
     });
 })();
