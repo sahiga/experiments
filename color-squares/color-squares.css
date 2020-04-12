@@ -1,0 +1,15 @@
+.square, .child-square {
+    transition: background-color 0.5s;
+}
+
+.square {
+    border-radius: 10px;
+    height: 400px;
+    margin: 2em auto;
+    width: 400px;
+}
+
+.child-square {
+    border-radius: 4px;
+    float: left;
+}
