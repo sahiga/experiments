@@ -1,5 +1,8 @@
-body {
+body { 
     color: #222;
+}
+
+body, button, input {
     font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
@@ -64,6 +67,30 @@ ol {
     margin-right: 0.5em;
     text-align: right;
     direction: rtl;
+}
+
+button {
+    background: cornflowerblue;
+    border: 0;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0.3em 0.8em;
+    -webkit-appearance: none;
+}
+
+button:not(:disabled):hover {
+    opacity: 0.8;
+}
+
+button:focus {
+    outline: none;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 /* GitHub corner from http://tholman.com/github-corners/ */
