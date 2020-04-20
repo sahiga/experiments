@@ -13,8 +13,10 @@
 
 .whiteboard-menu {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     margin: 1em;
+    width: 150px;
 }
 
 .whiteboard-menu li {

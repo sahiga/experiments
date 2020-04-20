@@ -1,7 +1,7 @@
 (function () {
     // State variables
     let drawing = false;
-    let erasing = false;
+    let eraserSelected = false;
 
     // Constants
     const canvas = document.getElementById('whiteboard');
@@ -43,7 +43,7 @@
         }
 
         colorCircle.addEventListener('click', function () {
-            if (!erasing) {
+            if (!eraserSelected) {
                 this.classList.add('selected');
                 ctx.strokeStyle = this.style.backgroundColor;
                 document.getElementsByClassName('color-circle')[lastSelectedIndex].classList.remove('selected');
@@ -55,32 +55,45 @@
     }
 
     // Enable drawing/erasing functionality
-    canvas.addEventListener('mousedown', event => {
+    function startPath(event) {
         drawing = true;
         const { offsetX, offsetY } = event;
         ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY);
-    });
+        ctx.moveTo(Math.floor(offsetX), Math.floor(offsetY));
+    }
 
-    canvas.addEventListener('mousemove', event => {
+    function continuePath(event) {
         if (drawing) {
             const { offsetX, offsetY } = event;
-            ctx.lineTo(offsetX, offsetY);
+            ctx.lineTo(Math.floor(offsetX), Math.floor(offsetY));
             ctx.stroke();
         }
-    });
+    }
 
-    canvas.addEventListener('mouseup', event => {
+    function endPath(event) {
         const { offsetX, offsetY } = event;
-        ctx.lineTo(offsetX, offsetY);
+        ctx.lineTo(Math.floor(offsetX), Math.floor(offsetY));
         ctx.stroke();
         drawing = false;
-    });
+    }
+
+    canvas.addEventListener('mousedown', startPath);
+    canvas.addEventListener('mousemove', continuePath);
+    canvas.addEventListener('mouseup', endPath);
+    canvas.addEventListener('touchstart', startPath);
+    canvas.addEventListener('touchmove', continuePath);
+    canvas.addEventListener('touchend', endPath);
 
     // Clear entire canvas
     const clearButton = document.getElementById('action-clear');
     clearButton.addEventListener('click', () => {
         ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
+    });
+
+    const saveButton = document.getElementById('action-save');
+    saveButton.addEventListener('click', function () {
+        const imageURL = canvas.toDataURL();
+        this.setAttribute('href', imageURL);
     });
 
     // Set up pencil and eraser tools
@@ -94,7 +107,7 @@
     pencilButton.setAttribute('disabled', true);
 
     pencilButton.addEventListener('click', () => {
-        erasing = false;
+        eraserSelected = false;
         colorCircles[lastSelectedIndex].classList.add('selected');
         ctx.strokeStyle = colors[lastSelectedIndex];
         ctx.lineWidth = lineWidths[0];
@@ -104,7 +117,7 @@
     });
 
     eraserButton.addEventListener('click', () => {
-        erasing = true;
+        eraserSelected = true;
         ctx.strokeStyle = '#fff';
         ctx.lineWidth = lineWidths[1];
         eraserButton.setAttribute('disabled', true);
