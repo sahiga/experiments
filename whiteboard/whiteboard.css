@@ -15,7 +15,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 1em;
+    margin: 1em auto;
     width: 150px;
 }
 
@@ -58,7 +58,7 @@
     opacity: 0.8;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .whiteboard-container {
         flex-direction: column;
     }

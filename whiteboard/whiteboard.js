@@ -55,34 +55,55 @@
     }
 
     // Enable drawing/erasing functionality
-    function startPath(event) {
+    function startPath(x, y) {
         drawing = true;
-        const { offsetX, offsetY } = event;
+        const canvasRect = canvas.getBoundingClientRect();
         ctx.beginPath();
-        ctx.moveTo(Math.floor(offsetX), Math.floor(offsetY));
+        ctx.moveTo(Math.floor(x - canvasRect.left), Math.floor(y - canvasRect.top));
     }
 
-    function continuePath(event) {
+    function continuePath(x, y) {
         if (drawing) {
-            const { offsetX, offsetY } = event;
-            ctx.lineTo(Math.floor(offsetX), Math.floor(offsetY));
+            const canvasRect = canvas.getBoundingClientRect();
+            ctx.lineTo(Math.floor(x - canvasRect.left), Math.floor(y - canvasRect.top));
             ctx.stroke();
         }
     }
 
-    function endPath(event) {
-        const { offsetX, offsetY } = event;
-        ctx.lineTo(Math.floor(offsetX), Math.floor(offsetY));
+    function endPath(x, y) {
+        const canvasRect = canvas.getBoundingClientRect();
+        ctx.lineTo(Math.floor(x - canvasRect.left), Math.floor(y - canvasRect.top));
         ctx.stroke();
         drawing = false;
     }
 
-    canvas.addEventListener('mousedown', startPath);
-    canvas.addEventListener('mousemove', continuePath);
-    canvas.addEventListener('mouseup', endPath);
-    canvas.addEventListener('touchstart', startPath);
-    canvas.addEventListener('touchmove', continuePath);
-    canvas.addEventListener('touchend', endPath);
+    canvas.addEventListener('touchstart', event => {
+        event.preventDefault();
+        const { clientX, clientY } = event.changedTouches[0];
+        startPath(clientX, clientY);
+    });
+    canvas.addEventListener('touchmove', event => {
+        event.preventDefault();
+        const { clientX, clientY } = event.changedTouches[0];
+        continuePath(clientX, clientY);
+    });
+    canvas.addEventListener('touchend', event => {
+        event.preventDefault();
+        const { clientX, clientY } = event.changedTouches[0];
+        endPath(clientX, clientY);
+    });
+    canvas.addEventListener('mousedown', event => {
+        const { clientX, clientY } = event;
+        startPath(clientX, clientY);
+    });
+    canvas.addEventListener('mousemove', event => {
+        const { clientX, clientY } = event;
+        continuePath(clientX, clientY);
+    });
+    canvas.addEventListener('mouseup', event => {
+        const { clientX, clientY } = event;
+        endPath(clientX, clientY);
+    });
 
     // Clear entire canvas
     const clearButton = document.getElementById('action-clear');
